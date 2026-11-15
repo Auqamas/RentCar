@@ -1,8 +1,8 @@
 # Ali Baba Rent a Car
 
-**Live website:** [https://auqamas.github.io/RentCar/](https://auqamas.github.io/RentCar/)
+**Live website:** [https://alibabarentacars.com](https://alibabarentacars.com)
 
-Luxury car hire site for Lahore. The public fleet, booking request flow, and WhatsApp desk run as a static site on GitHub Pages.
+Luxury car hire site for Lahore. Hosted on GitHub Pages with the custom domain above.
 
 > Opening this GitHub repository shows this README. The real website is the link above.
 
@@ -25,8 +25,8 @@ Admin login needs a server host (for example Vercel) and will return with the da
 Every push to `main` builds the static site and deploys to GitHub Pages.
 
 1. Repo **Settings → Pages → Build and deployment → Source: GitHub Actions**
-2. Push to `main` (or run the **Deploy GitHub Pages** workflow)
-3. Open [https://auqamas.github.io/RentCar/](https://auqamas.github.io/RentCar/)
+2. Custom domain: `alibabarentacars.com` (CNAME file is in `public/`)
+3. Push to `main`, then open [https://alibabarentacars.com](https://alibabarentacars.com)
 
 ## Later: database + server host
 

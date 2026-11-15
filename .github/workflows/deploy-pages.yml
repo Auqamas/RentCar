@@ -32,8 +32,7 @@ jobs:
 
       - name: Build static site
         env:
-          GITHUB_PAGES: "true"
-          NEXT_PUBLIC_SITE_URL: https://auqamas.github.io/RentCar
+          NEXT_PUBLIC_SITE_URL: https://alibabarentacars.com
           AUTH_SECRET: github-pages-static-build-secret-not-used-32chars
         run: npm run build
 
