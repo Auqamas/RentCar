@@ -3,6 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import { BookingForm } from "@/components/BookingForm";
 import { CarSelect } from "@/components/CarSelect";
+import { PhoneLink } from "@/components/PhoneLink";
 import { PublicImage } from "@/components/PublicImage";
 import { site } from "@/lib/site";
 
@@ -58,9 +59,16 @@ export function BookPageClient({ cars }: { cars: CarOption[] }) {
 
         <div className="panel p-4">
           <p className="text-xs uppercase tracking-[0.18em] text-brand">Ali Baba Rent a Car</p>
-          <a href={site.phoneHref} className="mt-2 block font-display text-2xl font-extrabold">
-            {site.phone}
-          </a>
+          <div className="mt-2 space-y-1">
+            {site.phones.map((item) => (
+              <PhoneLink
+                key={item.href}
+                phone={item.label}
+                href={item.href}
+                className="block font-display text-2xl font-extrabold"
+              />
+            ))}
+          </div>
           <a
             href={site.whatsapp}
             target="_blank"

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { CircleCheck, Phone } from "lucide-react";
+import { PhoneLink } from "@/components/PhoneLink";
 import { PublicImage } from "@/components/PublicImage";
 import { site } from "@/lib/site";
 
@@ -30,9 +31,18 @@ export default function AboutPage() {
               </p>
             ))}
           </div>
-          <a href={site.phoneHref} className="btn-primary mt-8 h-12 px-6 text-xs">
-            <Phone className="size-4" /> Call {site.phone}
-          </a>
+          <div className="mt-8 flex flex-wrap gap-3">
+            {site.phones.map((item) => (
+              <PhoneLink
+                key={item.href}
+                phone={item.label}
+                href={item.href}
+                className="btn-primary inline-flex h-12 items-center gap-2 px-6 text-xs"
+              >
+                <Phone className="size-4" /> Call {item.label}
+              </PhoneLink>
+            ))}
+          </div>
         </div>
 
         <div className="grid grid-cols-2 gap-3">

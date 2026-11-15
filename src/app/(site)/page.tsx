@@ -16,6 +16,7 @@ import { BrandsScroller } from "@/components/BrandsScroller";
 import { FleetSection } from "@/components/FleetSection";
 import { HomeSearch } from "@/components/HomeSearch";
 import { HowItWorks } from "@/components/HowItWorks";
+import { PhoneLink } from "@/components/PhoneLink";
 import { PublicImage } from "@/components/PublicImage";
 import { FacebookIcon, InstagramIcon } from "@/components/SocialIcons";
 import { getFeaturedCars, getPublicCars } from "@/lib/cars";
@@ -346,13 +347,19 @@ export default async function HomePage() {
         <div>
           <h2 className="font-display text-2xl font-extrabold">Need a car today?</h2>
           <p className="mt-1 text-sm text-white/85">
-            Ali Baba Rent a Car — call {site.phone}. We confirm the car, driver, and pickup.
+            Ali Baba Rent a Car — call {site.phones.map((p) => p.label).join(" / ")}. We confirm
+            the car, driver, and pickup.
           </p>
         </div>
         <div className="flex flex-wrap gap-3">
-          <a href={site.phoneHref} className="btn-white h-12 px-6 text-xs">
-            {site.phone}
-          </a>
+          {site.phones.map((item) => (
+            <PhoneLink
+              key={item.href}
+              phone={item.label}
+              href={item.href}
+              className="btn-white h-12 px-6 text-xs"
+            />
+          ))}
           <Link href="/book" className="inline-flex h-12 items-center rounded-full border border-white/40 px-6 text-xs font-bold uppercase tracking-wide">
             Book on site
           </Link>

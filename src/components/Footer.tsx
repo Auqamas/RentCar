@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Clock3, MapPin } from "lucide-react";
 import { Logo } from "@/components/Logo";
+import { PhoneLink } from "@/components/PhoneLink";
 import { FacebookIcon, InstagramIcon } from "@/components/SocialIcons";
 import { site } from "@/lib/site";
 
@@ -44,11 +45,13 @@ export function Footer() {
             Car rental from Lahore — Toyota, Honda, Suzuki and SUVs. Self-drive or
             with driver, daily to monthly, city, airport and outstation.
           </p>
-          <p className="mt-5 text-sm">
-            <a href={site.phoneHref} className="hover:text-brand">
-              {site.phone}
-            </a>
-          </p>
+          <div className="mt-5 space-y-1 text-sm">
+            {site.phones.map((item) => (
+              <p key={item.href}>
+                <PhoneLink phone={item.label} href={item.href} className="hover:text-brand" />
+              </p>
+            ))}
+          </div>
           <div className="mt-4 space-y-2 text-xs leading-5 text-muted">
             <p className="flex items-start gap-2">
               <MapPin className="mt-0.5 size-3.5 shrink-0 text-brand" /> {site.address}

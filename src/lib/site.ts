@@ -38,6 +38,10 @@ export const site = {
     "Ali Baba Rent a Car is a trusted rental service in Lahore. Toyota, Honda, Suzuki and SUV hire with self-drive or driver, for daily, weekly and monthly use.",
   phone: "+92 321 8366776",
   phoneHref: "tel:+923218366776",
+  /** Add more desk numbers here when provided. */
+  phones: [
+    { label: "+92 321 8366776", href: "tel:+923218366776" },
+  ] as const,
   whatsapp: "https://wa.me/923218366776",
   instagram: "https://www.instagram.com/official_alibabatourrentacar_1/",
   facebook: "https://www.facebook.com/Alibabarentacab",

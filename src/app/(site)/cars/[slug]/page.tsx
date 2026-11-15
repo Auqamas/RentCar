@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Gauge, Fuel, Users, Settings2 } from "lucide-react";
 import { CarClickTracker } from "@/components/CarClickTracker";
+import { PhoneLink } from "@/components/PhoneLink";
 import { PublicImage } from "@/components/PublicImage";
 import { getCarBySlug, getPublicCars } from "@/lib/cars";
 import { site } from "@/lib/site";
@@ -103,9 +104,16 @@ export default async function CarDetailPage({ params }: Props) {
             >
               Ask on WhatsApp
             </a>
-            <a href={site.phoneHref} className="text-center text-sm font-semibold">
-              Call {site.phone}
-            </a>
+            {site.phones.map((item) => (
+              <PhoneLink
+                key={item.href}
+                phone={item.label}
+                href={item.href}
+                className="text-center text-sm font-semibold"
+              >
+                Call {item.label}
+              </PhoneLink>
+            ))}
           </div>
         </div>
       </div>
