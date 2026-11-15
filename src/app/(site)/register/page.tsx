@@ -1,40 +1,33 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { registerAction } from "@/actions/auth";
-import { AuthForm } from "@/components/AuthForm";
+import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Register",
+  title: "Create account",
   robots: { index: false, follow: false },
 };
 
 export default function RegisterPage() {
   return (
-    <div className="px-5 py-16">
-      <AuthForm
-        action={registerAction}
-        title="Register"
-        subtitle="Create a client account to track bookings and pre-fill your details."
-        submitLabel="Create account"
-        extraFields={
-          <>
-            <label className="block text-sm">
-              Full name
-              <input name="name" required autoComplete="name" className="field mt-2" />
-            </label>
-            <label className="block text-sm">
-              Phone
-              <input name="phone" autoComplete="tel" className="field mt-2" />
-            </label>
-          </>
-        }
-      />
-      <p className="mx-auto mt-6 max-w-md text-sm text-muted">
-        Already registered?{" "}
-        <Link href="/login" className="text-white underline decoration-brand">
-          Sign in
-        </Link>
+    <div className="mx-auto max-w-lg px-5 py-16 sm:px-8">
+      <h1 className="font-display text-4xl font-extrabold">Create account</h1>
+      <p className="mt-4 text-sm leading-7 text-muted">
+        Accounts will return when the database is connected. For now, confirm every hire on
+        WhatsApp.
       </p>
+      <div className="mt-8 flex flex-wrap gap-3">
+        <a
+          href={site.whatsapp}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="btn-primary h-12 px-6 text-sm"
+        >
+          WhatsApp the desk
+        </a>
+        <Link href="/book/" className="btn-white h-12 px-6 text-sm">
+          Request a car
+        </Link>
+      </div>
     </div>
   );
 }

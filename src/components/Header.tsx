@@ -5,7 +5,6 @@ import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { Menu, Phone, X } from "lucide-react";
 import { Logo } from "@/components/Logo";
-import { logoutAction } from "@/actions/auth";
 import { site } from "@/lib/site";
 
 const links = [
@@ -16,7 +15,7 @@ const links = [
   { href: "/contact", label: "Contact" },
 ];
 
-export function Header({ userName }: { userName: string | null }) {
+export function Header() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
 
@@ -43,21 +42,6 @@ export function Header({ userName }: { userName: string | null }) {
         </nav>
 
         <div className="flex items-center gap-3">
-          {userName ? (
-            <>
-              <Link
-                href="/account"
-                className="hidden text-sm text-white/80 hover:text-white sm:inline"
-              >
-                My bookings
-              </Link>
-              <form action={logoutAction} className="hidden sm:block">
-                <button type="submit" className="text-sm text-white/70 hover:text-white">
-                  Sign out
-                </button>
-              </form>
-            </>
-          ) : null}
           <Link href="/book" className="btn-primary hidden h-10 px-5 text-[11px] sm:inline-flex">
             Book now
           </Link>
@@ -94,16 +78,6 @@ export function Header({ userName }: { userName: string | null }) {
           <Link href="/book" onClick={() => setOpen(false)} className="text-brand font-semibold">
             Book now
           </Link>
-          {userName ? (
-            <>
-              <Link href="/account" onClick={() => setOpen(false)}>
-                My bookings
-              </Link>
-              <form action={logoutAction}>
-                <button type="submit">Sign out</button>
-              </form>
-            </>
-          ) : null}
           <a href={site.phoneHref} className="font-semibold">
             {site.phone}
           </a>

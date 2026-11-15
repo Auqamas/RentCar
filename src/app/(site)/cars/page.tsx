@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { FleetSection } from "@/components/FleetSection";
+import { Suspense } from "react";
+import { CarsFleetClient } from "@/components/CarsFleetClient";
 import { getPublicCars } from "@/lib/cars";
 
 export const metadata: Metadata = {
@@ -8,12 +9,7 @@ export const metadata: Metadata = {
     "Browse economy cars, sedans, family vehicles and premium SUVs available from Ali Baba Rent a Car.",
 };
 
-export default async function CarsPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ category?: string; brand?: string }>;
-}) {
-  const params = await searchParams;
+export default async function CarsPage() {
   const cars = await getPublicCars();
 
   return (
@@ -24,16 +20,14 @@ export default async function CarsPage({
           Choose the car that fits your trip.
         </h1>
         <p className="mt-4 max-w-xl text-sm leading-7 text-muted">
-          City cars, sedans, family options and premium SUVs. Open any car for details,
-          then send your dates for current availability.
+          City cars, sedans, family options and premium SUVs. Open any car for details, then send
+          your dates for current availability.
         </p>
       </section>
       <div className="pt-10">
-      <FleetSection
-        cars={cars}
-        initialCategory={params.category}
-        initialBrand={params.brand}
-      />
+        <Suspense fallback={<div className="px-5 text-muted sm:px-8 lg:px-12">Loading fleet…</div>}>
+          <CarsFleetClient cars={cars} />
+        </Suspense>
       </div>
     </div>
   );

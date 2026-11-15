@@ -25,17 +25,20 @@ function alreadySeen() {
   return document.cookie.split("; ").some((part) => part === `${KEY}=1`);
 }
 
-export function IntroLoader({ initialShow }: { initialShow: boolean }) {
-  const [show, setShow] = useState(initialShow);
+export function IntroLoader() {
+  const [show, setShow] = useState(false);
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    if (!initialShow || alreadySeen()) {
+    if (alreadySeen()) {
       markSeen();
       setShow(false);
+      setReady(true);
       return;
     }
 
     setShow(true);
+    setReady(true);
 
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       markSeen();
@@ -57,15 +60,14 @@ export function IntroLoader({ initialShow }: { initialShow: boolean }) {
       setShow(false);
     }, TOTAL_MS + 600);
 
-    // Keep timers alive across React Strict Mode cleanup so dismiss cannot be cancelled.
     return () => {
       void liftTimer;
       void doneTimer;
       void failsafe;
     };
-  }, [initialShow]);
+  }, []);
 
-  if (!show) return null;
+  if (!ready || !show) return null;
 
   return (
     <div id="intro-overlay" className="intro-overlay" role="presentation" aria-hidden="true">

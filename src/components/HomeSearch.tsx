@@ -12,7 +12,7 @@ export function HomeSearch() {
     event.preventDefault();
     const params = new URLSearchParams();
     if (category !== "ALL") params.set("category", category);
-    router.push(params.size ? `/cars?${params.toString()}` : "/cars");
+    router.push(params.size ? `/cars/?${params.toString()}` : "/cars/");
   }
 
   return (

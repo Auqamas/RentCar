@@ -24,7 +24,7 @@ export function CarSelect({
       <select
         className="field mt-2"
         value={selectedSlug}
-        onChange={(event) => router.push(`/book?car=${event.target.value}`)}
+        onChange={(event) => router.push(`/book/?car=${event.target.value}`)}
       >
         {cars.map((car) => (
           <option key={car.id} value={car.slug}>

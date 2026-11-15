@@ -18,9 +18,9 @@ const columns = [
     title: "Cars",
     links: [
       { href: "/cars", label: "All cars" },
-      { href: "/cars?category=ECONOMY", label: "Economy" },
-      { href: "/cars?category=SEDAN", label: "Sedans" },
-      { href: "/cars?category=SUV", label: "SUVs" },
+      { href: "/cars/?category=ECONOMY", label: "Economy" },
+      { href: "/cars/?category=SEDAN", label: "Sedans" },
+      { href: "/cars/?category=SUV", label: "SUVs" },
       { href: "/book", label: "Book now" },
     ],
   },

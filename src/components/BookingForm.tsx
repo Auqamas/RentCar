@@ -1,35 +1,25 @@
 "use client";
 
-import { useActionState, useMemo, useState } from "react";
-import { createBookingAction } from "@/actions/booking";
-import { LOCATIONS } from "@/lib/site";
+import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import { LOCATIONS, site } from "@/lib/site";
 import { rentalDays } from "@/lib/utils";
-import type { ActionState } from "@/lib/validators";
 
 type BookingFormProps = {
   carId: string;
+  carSlug: string;
   carName: string;
   dailyRate: number;
-  defaultName?: string;
-  defaultEmail?: string;
-  defaultPhone?: string;
 };
 
 function todayIso() {
   return new Date().toISOString().slice(0, 10);
 }
 
-export function BookingForm({
-  carId,
-  carName,
-  defaultName = "",
-  defaultEmail = "",
-  defaultPhone = "",
-}: BookingFormProps) {
-  const [state, action, pending] = useActionState<ActionState, FormData>(
-    createBookingAction,
-    {},
-  );
+export function BookingForm({ carSlug, carName }: BookingFormProps) {
+  const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
+  const [pending, setPending] = useState(false);
   const [pickup, setPickup] = useState("");
   const [dropoff, setDropoff] = useState("");
   const [chauffeur, setChauffeur] = useState(false);
@@ -43,52 +33,103 @@ export function BookingForm({
     return { days: rentalDays(start, end), chauffeur };
   }, [pickup, dropoff, chauffeur]);
 
+  function onSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setError(null);
+    setPending(true);
+
+    const form = new FormData(event.currentTarget);
+    if (String(form.get("website") ?? "").length > 0) {
+      setPending(false);
+      return;
+    }
+
+    const guestName = String(form.get("guestName") ?? "").trim();
+    const guestPhone = String(form.get("guestPhone") ?? "").trim();
+    const pickupDate = String(form.get("pickupDate") ?? "");
+    const dropoffDate = String(form.get("dropoffDate") ?? "");
+    const pickupLocation = String(form.get("pickupLocation") ?? "");
+    const dropoffLocation = String(form.get("dropoffLocation") ?? "");
+    const notes = String(form.get("notes") ?? "").trim();
+    const withDriver = form.get("chauffeur") === "on";
+
+    if (!guestName || !guestPhone || !pickupDate || !dropoffDate) {
+      setError("Please fill in your name, phone and dates.");
+      setPending(false);
+      return;
+    }
+
+    const start = new Date(pickupDate);
+    const end = new Date(dropoffDate);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (start < today) {
+      setError("Pickup date cannot be in the past.");
+      setPending(false);
+      return;
+    }
+    if (end <= start) {
+      setError("Return date must be after pickup.");
+      setPending(false);
+      return;
+    }
+
+    const days = rentalDays(start, end);
+    const ref = `TMP-${Date.now().toString(36).toUpperCase()}`;
+    const text = [
+      "Hi Ali Baba, I want to book a car.",
+      `Car: ${carName}`,
+      `Name: ${guestName}`,
+      `Phone: ${guestPhone}`,
+      `Dates: ${pickupDate} to ${dropoffDate} (${days} day${days > 1 ? "s" : ""})`,
+      `Pickup: ${pickupLocation}`,
+      `Return: ${dropoffLocation}`,
+      withDriver ? "Driver: yes" : "Driver: no",
+      notes ? `Notes: ${notes}` : null,
+      `Ref: ${ref}`,
+    ]
+      .filter(Boolean)
+      .join("\n");
+
+    window.open(`${site.whatsapp}?text=${encodeURIComponent(text)}`, "_blank", "noopener,noreferrer");
+
+    const params = new URLSearchParams({
+      ref,
+      car: carSlug,
+      name: guestName,
+      from: pickupDate,
+      to: dropoffDate,
+      days: String(days),
+      chauffeur: withDriver ? "1" : "0",
+    });
+    router.push(`/book/confirmation/?${params.toString()}`);
+  }
+
   return (
-    <form action={action} className="panel space-y-4 p-6" aria-busy={pending}>
-      <input type="hidden" name="carId" value={carId} />
+    <form onSubmit={onSubmit} className="panel space-y-4 p-6" aria-busy={pending}>
       <input type="text" name="website" className="hidden" tabIndex={-1} autoComplete="off" />
       <h2 className="font-display text-2xl font-bold">Reserve {carName}</h2>
-      {state.error && (
+      {error && (
         <p
           role="alert"
           aria-live="polite"
           className="rounded-2xl border border-brand/40 bg-brand/10 px-4 py-3 text-sm"
         >
-          {state.error}
+          {error}
         </p>
       )}
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="text-sm">
           Full name
-          <input
-            name="guestName"
-            required
-            autoComplete="name"
-            defaultValue={defaultName}
-            className="field mt-2"
-          />
+          <input name="guestName" required autoComplete="name" className="field mt-2" />
         </label>
         <label className="text-sm">
           Email
-          <input
-            name="guestEmail"
-            type="email"
-            required
-            autoComplete="email"
-            defaultValue={defaultEmail}
-            className="field mt-2"
-          />
+          <input name="guestEmail" type="email" autoComplete="email" className="field mt-2" />
         </label>
         <label className="text-sm">
           Phone
-          <input
-            name="guestPhone"
-            type="tel"
-            required
-            autoComplete="tel"
-            defaultValue={defaultPhone}
-            className="field mt-2"
-          />
+          <input name="guestPhone" type="tel" required autoComplete="tel" className="field mt-2" />
         </label>
         <label className="text-sm">
           Pickup location
@@ -164,7 +205,7 @@ export function BookingForm({
         </p>
       )}
       <button type="submit" disabled={pending} className="btn-primary h-14 w-full text-sm">
-        {pending ? "Sending request..." : "Confirm booking request"}
+        {pending ? "Opening WhatsApp..." : "Confirm on WhatsApp"}
       </button>
     </form>
   );

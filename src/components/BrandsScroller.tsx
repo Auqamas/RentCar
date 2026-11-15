@@ -25,7 +25,7 @@ const BRANDS = [
 function brandHref(name: string) {
   if (FLEET_BRANDS.has(name)) {
     const queryBrand = name === "KIA" ? "Kia" : name;
-    return `/cars?brand=${encodeURIComponent(queryBrand)}`;
+    return `/cars/?brand=${encodeURIComponent(queryBrand)}`;
   }
   return `${site.whatsapp}?text=${encodeURIComponent(`Hi, do you have a ${name} available?`)}`;
 }

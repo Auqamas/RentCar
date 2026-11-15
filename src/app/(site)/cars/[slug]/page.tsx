@@ -10,6 +10,11 @@ import { parseCarImages } from "@/lib/utils";
 
 type Props = { params: Promise<{ slug: string }> };
 
+export async function generateStaticParams() {
+  const cars = await getPublicCars();
+  return cars.map((car) => ({ slug: car.slug }));
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const car = await getCarBySlug(slug);
@@ -87,7 +92,7 @@ export default async function CarDetailPage({ params }: Props) {
             ))}
           </div>
           <div className="mt-8 flex flex-col gap-3">
-            <Link href={`/book?car=${car.slug}`} className="btn-white h-14 px-8 text-sm">
+            <Link href={`/book/?car=${car.slug}`} className="btn-white h-14 px-8 text-sm">
               Send booking request
             </Link>
             <a

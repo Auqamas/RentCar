@@ -23,35 +23,35 @@ import { routes, site } from "@/lib/site";
 
 const categories = [
   {
-    href: "/cars?category=ECONOMY",
+    href: "/cars/?category=ECONOMY",
     title: "Economy",
     text: "Alto, Wagon R and Yaris for practical city travel.",
     icon: KeyRound,
     external: false,
   },
   {
-    href: "/cars?category=SEDAN",
+    href: "/cars/?category=SEDAN",
     title: "Sedans",
     text: "Corolla, Grande, Civic and City for work or family.",
     icon: Car,
     external: false,
   },
   {
-    href: "/cars?category=SUV",
+    href: "/cars/?category=SUV",
     title: "SUVs",
     text: "Comfortable crossovers for city and motorway.",
     icon: MapPinned,
     external: false,
   },
   {
-    href: "/cars?category=FAMILY",
+    href: "/cars/?category=FAMILY",
     title: "Family",
     text: "More seats and luggage room for group travel.",
     icon: Users,
     external: false,
   },
   {
-    href: "/cars?category=PREMIUM",
+    href: "/cars/?category=PREMIUM",
     title: "Premium",
     text: "Land Cruiser, Prado and Range Rover.",
     icon: ShieldCheck,

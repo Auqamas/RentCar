@@ -1,7 +1,11 @@
 import Link from "next/link";
-import { getFleetCarById } from "@/lib/fleet";
+import { FLEET, getFleetCarById } from "@/lib/fleet";
 
 type Props = { params: Promise<{ id: string }> };
+
+export async function generateStaticParams() {
+  return FLEET.map((car) => ({ id: car.id }));
+}
 
 export default async function EditCarPage({ params }: Props) {
   const { id } = await params;
@@ -14,10 +18,10 @@ export default async function EditCarPage({ params }: Props) {
         {car ? `Edit ${car.brand} ${car.name}` : "Car"}
       </h1>
       <p className="text-sm leading-7 text-muted">
-        Editing cars needs the database. Reconnect storage later to change fleet details from the
-        admin desk.
+        Editing cars needs the database on a server host. GitHub Pages serves the static fleet
+        only.
       </p>
-      <Link href="/admin/cars" className="btn-primary inline-flex h-11 px-5 text-xs">
+      <Link href="/admin/cars/" className="btn-primary inline-flex h-11 px-5 text-xs">
         Back to cars
       </Link>
     </div>

@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { CarCard } from "@/components/CarCard";
 import { CATEGORIES } from "@/lib/site";
 import { cn } from "@/lib/utils";
@@ -35,12 +36,16 @@ export function FleetSection({
   intro?: string;
   limit?: number;
 }) {
+  const pathname = usePathname();
+  const router = useRouter();
+
   const availableCategories = useMemo(
     () => CATEGORIES.filter((category) => cars.some((car) => car.category === category)),
     [cars],
   );
   const validInitial =
-    initialCategory && availableCategories.includes(initialCategory as (typeof CATEGORIES)[number])
+    initialCategory &&
+    availableCategories.includes(initialCategory as (typeof CATEGORIES)[number])
       ? initialCategory
       : "ALL";
   const [selected, setSelected] = useState(validInitial);
@@ -56,12 +61,12 @@ export function FleetSection({
 
   function choose(filter: string) {
     setSelected(filter);
-    if (typeof window === "undefined" || window.location.pathname !== "/cars") return;
-    const params = new URLSearchParams(window.location.search);
-    if (filter === "ALL") params.delete("category");
-    else params.set("category", filter);
+    if (!pathname.startsWith("/cars")) return;
+    const params = new URLSearchParams();
+    if (initialBrand) params.set("brand", initialBrand);
+    if (filter !== "ALL") params.set("category", filter);
     const query = params.toString();
-    window.history.replaceState(null, "", query ? `/cars?${query}` : "/cars");
+    router.replace(query ? `/cars/?${query}` : "/cars/");
   }
 
   return (
@@ -82,7 +87,7 @@ export function FleetSection({
       {initialBrand && (
         <p className="mt-5 text-sm text-muted">
           Showing {initialBrand}.{" "}
-          <Link href="/cars" className="text-white underline decoration-brand">
+          <Link href="/cars/" className="text-white underline decoration-brand">
             View full fleet
           </Link>
         </p>
@@ -122,7 +127,7 @@ export function FleetSection({
 
       {limit && cars.length > limit ? (
         <div className="mt-10">
-          <Link href="/cars" className="btn-primary h-12 px-6 text-xs">
+          <Link href="/cars/" className="btn-primary h-12 px-6 text-xs">
             View all cars
           </Link>
         </div>
