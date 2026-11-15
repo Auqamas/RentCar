@@ -1,36 +1,28 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Ali Baba Rent a Car
 
-## Getting Started
+Luxury car hire website with a public booking flow and a private admin desk for the fleet.
 
-First, run the development server:
+## Run locally
 
 ```bash
+npm install
+copy .env.example .env
+npm run db:setup
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Admin
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- URL: `/admin/login`
+- Email: `ADMIN_EMAIL` in `.env` (default `admin@alibabarentacar.com`)
+- Password: `ADMIN_PASSWORD` in `.env`
 
-## Learn More
+Change that password from **Settings** after the first sign-in. Do not commit `.env`.
 
-To learn more about Next.js, take a look at the following resources:
+## What is included
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Public site: home, fleet filters, car pages, booking, about, features, help, contact, register/login
+- Admin: stats, add/edit/remove cars, booking status, messages, password change, activity log
+- Security: hashed passwords, httpOnly JWT cookies, admin/client sessions split, rate limits, account lockout, origin checks, security headers, Zod validation, CSRF-safe server actions

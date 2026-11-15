@@ -1,0 +1,113 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                  String    @id @default(cuid())
+  name                String
+  email               String    @unique
+  phone               String?
+  passwordHash        String
+  role                String    @default("CUSTOMER")
+  failedLoginAttempts Int       @default(0)
+  lockedUntil         DateTime?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+  bookings            Booking[]
+  auditLogs           AuditLog[]
+}
+
+model Car {
+  id           String     @id @default(cuid())
+  slug         String     @unique
+  name         String
+  brand        String
+  category     String
+  year         Int
+  dailyRate    Int
+  seats        Int
+  transmission String
+  fuel         String
+  horsepower   Int?
+  topSpeed     Int?
+  description  String
+  imageUrl     String
+  images       String     @default("[]")
+  featured     Boolean    @default(false)
+  available    Boolean    @default(true)
+  published    Boolean    @default(true)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  bookings     Booking[]
+  clicks       CarClick[]
+}
+
+model CarClick {
+  id        String   @id @default(cuid())
+  carId     String
+  car       Car      @relation(fields: [carId], references: [id], onDelete: Cascade)
+  visitorId String
+  createdAt DateTime @default(now())
+
+  @@index([carId])
+  @@index([createdAt])
+}
+
+model SiteVisit {
+  id        String   @id @default(cuid())
+  path      String
+  visitorId String
+  createdAt DateTime @default(now())
+
+  @@index([visitorId])
+  @@index([createdAt])
+}
+
+model Booking {
+  id              String   @id @default(cuid())
+  carId           String
+  car             Car      @relation(fields: [carId], references: [id], onDelete: Restrict)
+  userId          String?
+  user            User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  guestName       String
+  guestEmail      String
+  guestPhone      String
+  pickupDate      DateTime
+  dropoffDate     DateTime
+  pickupLocation  String
+  dropoffLocation String
+  chauffeur       Boolean  @default(false)
+  notes           String?
+  status          String   @default("PENDING")
+  totalAmount     Int
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  subject   String
+  message   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action    String
+  entity    String
+  entityId  String?
+  ip        String?
+  createdAt DateTime @default(now())
+}
