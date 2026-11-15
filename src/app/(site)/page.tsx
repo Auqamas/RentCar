@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import {
   ArrowRight,
   Plane,
@@ -17,6 +16,7 @@ import { BrandsScroller } from "@/components/BrandsScroller";
 import { FleetSection } from "@/components/FleetSection";
 import { HomeSearch } from "@/components/HomeSearch";
 import { HowItWorks } from "@/components/HowItWorks";
+import { PublicImage } from "@/components/PublicImage";
 import { FacebookIcon, InstagramIcon } from "@/components/SocialIcons";
 import { getFeaturedCars, getPublicCars } from "@/lib/cars";
 import { routes, site } from "@/lib/site";
@@ -168,7 +168,7 @@ export default async function HomePage() {
           </div>
 
           <div className="relative min-h-[340px] overflow-hidden rounded-[2rem] border border-white/15 bg-[#111] shadow-2xl lg:min-h-[520px]">
-            <Image
+            <PublicImage
               src="/cars/range-rover.jpg"
               alt="White Range Rover available from Ali Baba Rent a Car"
               fill

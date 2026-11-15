@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Gauge, Fuel, Users, Settings2 } from "lucide-react";
 import { CarClickTracker } from "@/components/CarClickTracker";
+import { PublicImage } from "@/components/PublicImage";
+import { asset } from "@/lib/asset";
 import { getCarBySlug, getPublicCars } from "@/lib/cars";
 import { site } from "@/lib/site";
 import { parseCarImages } from "@/lib/utils";
@@ -25,7 +26,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: `${car.brand} ${car.name} | Ali Baba Rent a Car`,
       description: car.description,
-      images: [car.imageUrl],
+      images: [asset(car.imageUrl)],
     },
   };
 }
@@ -46,7 +47,7 @@ export default async function CarDetailPage({ params }: Props) {
       <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr]">
         <div>
           <div className="relative min-h-[320px] overflow-hidden rounded-3xl border border-white/15 lg:min-h-[520px]">
-            <Image
+            <PublicImage
               src={photos[0]}
               alt={`${car.brand} ${car.name}`}
               fill
@@ -59,7 +60,7 @@ export default async function CarDetailPage({ params }: Props) {
             <div className="mt-3 grid grid-cols-4 gap-2">
               {photos.map((src, index) => (
                 <div key={src} className="relative h-20 overflow-hidden rounded-xl border border-white/15">
-                  <Image src={src} alt={`${car.name} ${index + 1}`} fill className="object-cover" />
+                  <PublicImage src={src} alt={`${car.name} ${index + 1}`} fill className="object-cover" />
                 </div>
               ))}
             </div>
@@ -117,7 +118,7 @@ export default async function CarDetailPage({ params }: Props) {
             {related.map((item) => (
               <Link key={item.slug} href={`/cars/${item.slug}`} className="panel group overflow-hidden hover:border-brand">
                 <div className="relative aspect-[16/9]">
-                  <Image
+                  <PublicImage
                     src={item.imageUrl}
                     alt={`${item.brand} ${item.name}`}
                     fill

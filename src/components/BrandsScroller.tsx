@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { asset } from "@/lib/asset";
 import { site } from "@/lib/site";
 
 const FLEET_BRANDS = new Set(["Suzuki", "Toyota", "Honda", "KIA", "Land Rover"]);
@@ -43,7 +44,7 @@ function BrandContent({
     <>
       <span className={`brand-disc ${photo ? "brand-disc-photo" : ""}`}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={file} alt="" className={photo ? "brand-mark-photo" : "brand-mark"} />
+        <img src={asset(file)} alt="" className={photo ? "brand-mark-photo" : "brand-mark"} />
       </span>
       <span className="brand-name">{name}</span>
     </>

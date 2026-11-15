@@ -1,9 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { BookingForm } from "@/components/BookingForm";
 import { CarSelect } from "@/components/CarSelect";
+import { PublicImage } from "@/components/PublicImage";
 import { site } from "@/lib/site";
 
 type CarOption = {
@@ -41,7 +41,7 @@ export function BookPageClient({ cars }: { cars: CarOption[] }) {
         </div>
 
         <div className="relative aspect-[16/9] overflow-hidden rounded-3xl border border-white/15">
-          <Image
+          <PublicImage
             src={selected.imageUrl}
             alt={`${selected.brand} ${selected.name}`}
             fill

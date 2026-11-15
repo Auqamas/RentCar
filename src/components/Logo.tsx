@@ -1,10 +1,10 @@
-import Image from "next/image";
 import Link from "next/link";
+import { PublicImage } from "@/components/PublicImage";
 
 export function Logo({ compact = false }: { compact?: boolean }) {
   return (
     <Link href="/" className="flex items-center gap-3">
-      <Image
+      <PublicImage
         src="/logo.png"
         alt="Ali Baba Rent a Car"
         width={compact ? 150 : 190}

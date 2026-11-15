@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { Fuel, Settings2, Users } from "lucide-react";
+import { PublicImage } from "@/components/PublicImage";
 type CarCardProps = {
   id?: string;
   slug: string;
@@ -34,7 +34,7 @@ export function CarCard({
       className="group panel flex flex-col overflow-hidden transition-colors hover:border-brand/70"
     >
       <div className="relative aspect-[16/10] bg-[#111]">
-        <Image
+        <PublicImage
           src={imageUrl}
           alt={`${brand} ${name}`}
           fill

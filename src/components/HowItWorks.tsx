@@ -1,7 +1,7 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useRef } from "react";
+import { PublicImage } from "@/components/PublicImage";
 
 const steps = [
   {
@@ -58,7 +58,7 @@ export function HowItWorks() {
               <p className="mt-2 text-sm leading-6 text-muted">{step.d}</p>
             </div>
             <div className="how-frame relative">
-              <Image
+              <PublicImage
                 src={step.img}
                 alt={step.alt}
                 fill

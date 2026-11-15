@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { CircleCheck, Phone } from "lucide-react";
+import { PublicImage } from "@/components/PublicImage";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = { title: "About Us" };
@@ -37,7 +37,7 @@ export default function AboutPage() {
 
         <div className="grid grid-cols-2 gap-3">
           <div className="relative col-span-2 aspect-[16/9] overflow-hidden rounded-3xl border border-white/15">
-            <Image
+            <PublicImage
               src="/cars/land-cruiser.jpg"
               alt="Toyota Land Cruiser from the premium fleet"
               fill
@@ -47,10 +47,16 @@ export default function AboutPage() {
             />
           </div>
           <div className="relative aspect-square overflow-hidden rounded-3xl border border-white/15">
-            <Image src="/cars/civic.jpg" alt="Honda Civic sedan" fill className="object-cover" sizes="25vw" />
+            <PublicImage src="/cars/civic.jpg" alt="Honda Civic sedan" fill className="object-cover" sizes="25vw" />
           </div>
           <div className="relative aspect-square overflow-hidden rounded-3xl border border-white/15">
-            <Image src="/cars/grande.jpg" alt="Toyota Corolla Grande sedan" fill className="object-cover" sizes="25vw" />
+            <PublicImage
+              src="/cars/grande.jpg"
+              alt="Toyota Corolla Grande sedan"
+              fill
+              className="object-cover"
+              sizes="25vw"
+            />
           </div>
         </div>
       </div>
