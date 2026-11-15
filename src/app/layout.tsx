@@ -42,7 +42,15 @@ export const metadata: Metadata = {
     description: site.description,
     images: ["cars/range-rover.jpg"],
   },
-  icons: { icon: "logo.png", apple: "logo.png" },
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "16x16 32x32", type: "image/x-icon" },
+      { url: "/icon-32.png", sizes: "32x32", type: "image/png" },
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+    ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+    shortcut: "/favicon.ico",
+  },
   robots: { index: true, follow: true },
 };
 
