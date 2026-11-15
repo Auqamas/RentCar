@@ -4,7 +4,6 @@ import { notFound } from "next/navigation";
 import { Gauge, Fuel, Users, Settings2 } from "lucide-react";
 import { CarClickTracker } from "@/components/CarClickTracker";
 import { PublicImage } from "@/components/PublicImage";
-import { asset } from "@/lib/asset";
 import { getCarBySlug, getPublicCars } from "@/lib/cars";
 import { site } from "@/lib/site";
 import { parseCarImages } from "@/lib/utils";
@@ -26,7 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: `${car.brand} ${car.name} | Ali Baba Rent a Car`,
       description: car.description,
-      images: [asset(car.imageUrl)],
+      images: [car.imageUrl.replace(/^\//, "")],
     },
   };
 }
