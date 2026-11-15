@@ -1,33 +1,25 @@
-import type { Metadata } from "next";
-import Link from "next/link";
-import { prisma } from "@/lib/prisma";
-import { formatPKR } from "@/lib/utils";
-
-export const metadata: Metadata = { title: "Fleet" };
+import { getPublicCars } from "@/lib/cars";
 
 export default async function AdminCarsPage() {
-  const cars = await prisma.car.findMany({ orderBy: [{ brand: "asc" }, { name: "asc" }] });
+  const cars = await getPublicCars();
 
   return (
     <div>
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <p className="text-xs tracking-[0.25em] uppercase text-brand">Inventory</p>
-          <h1 className="mt-2 font-display text-4xl font-extrabold">Fleet</h1>
-        </div>
-        <Link href="/admin/cars/new" className="btn-primary h-11 px-5 text-xs">
-          Add a car
-        </Link>
-      </div>
-      <div className="mt-8 overflow-x-auto rounded-[24px] border border-white/10">
-        <table className="w-full text-sm">
-          <thead className="text-left text-xs uppercase tracking-wider text-muted">
+      <p className="text-xs uppercase tracking-[0.25em] text-brand">Inventory</p>
+      <h1 className="mt-2 font-display text-4xl font-extrabold">Cars</h1>
+      <p className="mt-3 max-w-2xl text-sm text-muted">
+        Showing the static fleet. Add, edit and draft cars will return when the database is
+        connected again.
+      </p>
+
+      <div className="mt-8 overflow-x-auto rounded-2xl border border-white/10">
+        <table className="min-w-full text-left text-sm">
+          <thead className="bg-white/5 text-xs uppercase tracking-[0.14em] text-muted">
             <tr>
               <th className="px-4 py-3">Car</th>
-              <th>Category</th>
-              <th>Rate</th>
-              <th>Status</th>
-              <th></th>
+              <th className="px-4 py-3">Category</th>
+              <th className="px-4 py-3">Year</th>
+              <th className="px-4 py-3">Status</th>
             </tr>
           </thead>
           <tbody>
@@ -37,16 +29,11 @@ export default async function AdminCarsPage() {
                   <p className="font-semibold">
                     {car.brand} {car.name}
                   </p>
-                  <p className="text-xs text-muted">{car.year}</p>
+                  <p className="text-xs text-muted">{car.slug}</p>
                 </td>
-                <td>{car.category}</td>
-                <td>{formatPKR(car.dailyRate)}</td>
-                <td>{car.published ? (car.available ? "Live" : "Hidden") : "Draft"}</td>
-                <td className="pr-4 text-right">
-                  <Link href={`/admin/cars/${car.id}`} className="text-brand">
-                    Edit
-                  </Link>
-                </td>
+                <td className="px-4 py-3">{car.category}</td>
+                <td className="px-4 py-3">{car.year}</td>
+                <td className="px-4 py-3 text-brand">Published</td>
               </tr>
             ))}
           </tbody>

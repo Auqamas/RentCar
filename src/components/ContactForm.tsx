@@ -10,7 +10,8 @@ export function ContactForm() {
   if (state.ok) {
     return (
       <p className="panel p-8 text-sm leading-6">
-        Thank you. A coordinator will reply within a few hours during service hours, which for Ali Baba is around the clock.
+        Thank you. For the fastest reply, follow up on WhatsApp — the desk is available around the
+        clock.
       </p>
     );
   }

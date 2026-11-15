@@ -1,13 +1,5 @@
-import { PrismaClient } from "@/generated/prisma";
-
-const globalForPrisma = globalThis as unknown as { prismaClient?: PrismaClient };
-
-export const prisma =
-  globalForPrisma.prismaClient ??
-  new PrismaClient({
-    log: process.env.NODE_ENV === "development" ? ["error", "warn"] : ["error"],
-  });
-
-if (process.env.NODE_ENV !== "production") {
-  globalForPrisma.prismaClient = prisma;
-}
+/**
+ * Prisma is disconnected for now.
+ * Re-enable by restoring DATABASE_URL, `prisma` scripts, and imports from `@/generated/prisma`.
+ */
+export const prisma = null as never;

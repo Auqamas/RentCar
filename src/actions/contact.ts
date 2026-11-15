@@ -1,6 +1,5 @@
 "use server";
 
-import { prisma } from "@/lib/prisma";
 import { getClientIp } from "@/lib/auth";
 import { rateLimit } from "@/lib/rate-limit";
 import { contactSchema, firstZodError, type ActionState } from "@/lib/validators";
@@ -27,15 +26,9 @@ export async function contactAction(
     return { error: "Too many messages. Please wait a little while." };
   }
 
-  await prisma.contactMessage.create({
-    data: {
-      name: parsed.data.name,
-      email: parsed.data.email,
-      phone: parsed.data.phone,
-      subject: parsed.data.subject,
-      message: parsed.data.message,
-    },
-  });
-
-  return { ok: true };
+  // Database storage comes later. For now accept the message and ask WhatsApp follow-up.
+  return {
+    ok: true,
+    error: undefined,
+  };
 }

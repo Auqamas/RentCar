@@ -1,7 +1,6 @@
 import { redirect } from "next/navigation";
 import { AdminShell } from "@/components/admin/AdminShell";
 import { getAdminSession } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
@@ -13,10 +12,8 @@ export default async function AdminConsoleLayout({
   const session = await getAdminSession();
   if (!session) redirect("/admin/login");
 
-  const unread = await prisma.contactMessage.count({ where: { read: false } });
-
   return (
-    <AdminShell unread={unread} adminName={session.name}>
+    <AdminShell unread={0} adminName={session.name}>
       {children}
     </AdminShell>
   );

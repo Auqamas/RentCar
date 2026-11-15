@@ -3,7 +3,7 @@ import Image from "next/image";
 import { BookingForm } from "@/components/BookingForm";
 import { CarSelect } from "@/components/CarSelect";
 import { getCustomerSession } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+import { getPublicCars } from "@/lib/cars";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -18,10 +18,7 @@ export default async function BookPage({
 }) {
   const { car: slug } = await searchParams;
   const session = await getCustomerSession();
-  const cars = await prisma.car.findMany({
-    where: { available: true, published: true },
-    orderBy: [{ featured: "desc" }, { brand: "asc" }, { name: "asc" }],
-  });
+  const cars = await getPublicCars();
 
   if (!cars.length) {
     return (

@@ -1,11 +1,10 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { prisma } from "@/lib/prisma";
-import { getClientIp, getCustomerSession } from "@/lib/auth";
+import { getFleetCarById } from "@/lib/fleet";
+import { getClientIp } from "@/lib/auth";
 import { rateLimit } from "@/lib/rate-limit";
 import { bookingSchema, firstZodError, type ActionState } from "@/lib/validators";
-import { CHAUFFEUR_DAILY_RATE } from "@/lib/site";
 import { rentalDays } from "@/lib/utils";
 
 export async function createBookingAction(
@@ -46,45 +45,22 @@ export async function createBookingAction(
     return { error: "Pickup date cannot be in the past." };
   }
 
-  const car = await prisma.car.findUnique({ where: { id: parsed.data.carId } });
+  const car = getFleetCarById(parsed.data.carId);
   if (!car || !car.available) {
     return { error: "This vehicle is not available." };
   }
 
-  const clash = await prisma.booking.findFirst({
-    where: {
-      carId: car.id,
-      status: { in: ["PENDING", "CONFIRMED", "ACTIVE"] },
-      pickupDate: { lt: dropoffDate },
-      dropoffDate: { gt: pickupDate },
-    },
-  });
-  if (clash) {
-    return { error: "This car is already reserved for those dates. Please choose different dates." };
-  }
-
   const days = rentalDays(pickupDate, dropoffDate);
-  const chauffeurFee = parsed.data.chauffeur ? CHAUFFEUR_DAILY_RATE * days : 0;
-  const totalAmount = car.dailyRate * days + chauffeurFee;
-  const session = await getCustomerSession();
-
-  const booking = await prisma.booking.create({
-    data: {
-      carId: car.id,
-      userId: session?.id,
-      guestName: parsed.data.guestName,
-      guestEmail: parsed.data.guestEmail,
-      guestPhone: parsed.data.guestPhone,
-      pickupDate,
-      dropoffDate,
-      pickupLocation: parsed.data.pickupLocation,
-      dropoffLocation: parsed.data.dropoffLocation,
-      chauffeur: Boolean(parsed.data.chauffeur),
-      notes: parsed.data.notes,
-      status: "PENDING",
-      totalAmount,
-    },
+  const ref = `TMP-${Date.now().toString(36).toUpperCase()}`;
+  const params = new URLSearchParams({
+    ref,
+    car: car.slug,
+    name: parsed.data.guestName,
+    from: parsed.data.pickupDate,
+    to: parsed.data.dropoffDate,
+    days: String(days),
+    chauffeur: parsed.data.chauffeur ? "1" : "0",
   });
 
-  redirect(`/book/confirmation?id=${booking.id}`);
+  redirect(`/book/confirmation?${params.toString()}`);
 }

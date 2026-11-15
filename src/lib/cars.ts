@@ -1,26 +1,21 @@
-import { prisma } from "@/lib/prisma";
+import { FLEET, getFleetCarBySlug, type FleetCar } from "@/lib/fleet";
+
+export type PublicCar = FleetCar;
 
 export async function getPublicCars() {
-  return prisma.car.findMany({
-    where: { available: true, published: true },
-    orderBy: [{ featured: "desc" }, { dailyRate: "asc" }, { brand: "asc" }],
+  return FLEET.filter((car) => car.available && car.published).sort((a, b) => {
+    if (a.featured !== b.featured) return Number(b.featured) - Number(a.featured);
+    if (a.dailyRate !== b.dailyRate) return a.dailyRate - b.dailyRate;
+    return a.brand.localeCompare(b.brand);
   });
 }
 
 export async function getFeaturedCars(take = 6) {
-  return prisma.car.findMany({
-    where: { available: true, published: true, featured: true },
-    orderBy: { dailyRate: "asc" },
-    take,
-  });
+  return (await getPublicCars()).filter((car) => car.featured).slice(0, take);
 }
 
 export async function getFleetBrands() {
-  const cars = await prisma.car.findMany({
-    where: { available: true, published: true },
-    orderBy: { featured: "desc" },
-  });
-
+  const cars = await getPublicCars();
   const map = new Map<
     string,
     { brand: string; count: number; imageUrl: string; category: string }
@@ -44,7 +39,5 @@ export async function getFleetBrands() {
 }
 
 export async function getCarBySlug(slug: string) {
-  return prisma.car.findUnique({
-    where: { slug },
-  });
+  return getFleetCarBySlug(slug);
 }

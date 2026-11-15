@@ -1,3 +1,6 @@
+// Paused: the live site uses static fleet data. Reconnect Prisma later for admin writes,
+// bookings, messages, and client accounts.
+
 generator client {
   provider = "prisma-client-js"
   output   = "../src/generated/prisma"
