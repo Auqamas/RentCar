@@ -2,61 +2,36 @@
 
 import { useEffect, useState } from "react";
 
-const KEY = "ab_intro";
 const TOTAL_MS = 2800;
 const LIFT_MS = 2150;
 
-function markSeen() {
-  try {
-    window.localStorage.setItem(KEY, "1");
-  } catch {
-    /* ignore */
-  }
-  document.cookie = `${KEY}=1; Path=/; Max-Age=31536000; SameSite=Lax`;
+function finishIntro() {
   document.documentElement.classList.add("intro-done");
 }
 
-function alreadySeen() {
-  try {
-    if (window.localStorage.getItem(KEY) === "1") return true;
-  } catch {
-    /* ignore */
-  }
-  return document.cookie.split("; ").some((part) => part === `${KEY}=1`);
-}
-
 export function IntroLoader() {
-  const [show, setShow] = useState(false);
-  const [ready, setReady] = useState(false);
+  const [show, setShow] = useState(true);
 
   useEffect(() => {
-    if (alreadySeen()) {
-      markSeen();
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      finishIntro();
       setShow(false);
-      setReady(true);
       return;
     }
 
     setShow(true);
-    setReady(true);
-
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      markSeen();
-      setShow(false);
-      return;
-    }
 
     const liftTimer = window.setTimeout(() => {
       document.getElementById("intro-overlay")?.classList.add("intro-overlay-up");
     }, LIFT_MS);
 
     const doneTimer = window.setTimeout(() => {
-      markSeen();
+      finishIntro();
       setShow(false);
     }, TOTAL_MS);
 
     const failsafe = window.setTimeout(() => {
-      markSeen();
+      finishIntro();
       setShow(false);
     }, TOTAL_MS + 600);
 
@@ -67,7 +42,7 @@ export function IntroLoader() {
     };
   }, []);
 
-  if (!ready || !show) return null;
+  if (!show) return null;
 
   return (
     <div id="intro-overlay" className="intro-overlay" role="presentation" aria-hidden="true">
@@ -98,7 +73,7 @@ export function IntroLoader() {
         type="button"
         className="absolute bottom-8 rounded-full border border-white/20 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-white/80 hover:border-white hover:text-white"
         onClick={() => {
-          markSeen();
+          finishIntro();
           setShow(false);
         }}
       >
